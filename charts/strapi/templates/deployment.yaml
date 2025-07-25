@@ -21,7 +21,7 @@ spec:
           ports:
             - containerPort: 1337
           env:
-            '{{- range $key, $val := .Values.env }}
+            {{- range $key, $val := .Values.env }}
             - name: {{ $key }}
               value: "{{ $val }}"
-            {{- end }}'
+            {{- end }}
