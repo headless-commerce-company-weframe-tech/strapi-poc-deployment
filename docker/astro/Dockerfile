@@ -38,7 +38,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.astro ./.astro
 COPY --from=builder /app/astro.config.* ./
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/server/ ./server/
+# COPY --from=builder /app/server/ ./server/
 
 # Default port (change in Helm if needed)
 EXPOSE 3000

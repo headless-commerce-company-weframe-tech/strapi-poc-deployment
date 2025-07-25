@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: your-registry/astro
+  repository: astro-local
   tag: latest
   pullPolicy: IfNotPresent
 
