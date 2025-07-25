@@ -30,14 +30,14 @@ WORKDIR /app
 
 # Install only runtime dependencies
 COPY package*.json ./
-RUN npm install --omit=dev
+# RUN npm install --omit=dev
 
 # Copy built assets from builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.astro ./.astro
-COPY --from=builder /app/astro.config.* ./
-COPY --from=builder /app/package.json ./
+# COPY --from=builder /app/public ./public
+# COPY --from=builder /app/.astro ./.astro
+# COPY --from=builder /app/astro.config.* ./
+# COPY --from=builder /app/package.json ./
 # COPY --from=builder /app/server/ ./server/
 
 # Default port (change in Helm if needed)

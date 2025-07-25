@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: mautic/mautic
+  repository: mautic-local
   tag: v4.4.10
   pullPolicy: IfNotPresent
 

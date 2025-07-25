@@ -1,46 +1,44 @@
-# ============================
-# ⛏️ Build Stage
-# ============================
-FROM node:18-alpine as builder
+# ---------- STAGE 1: Build ----------
+FROM node:18-alpine AS builder
 
+# Install OS deps
+RUN apk add --no-cache python3 make g++ curl git ca-certificates && update-ca-certificates
+
+# Set working directory
 WORKDIR /app
 
-# Install required dependencies for building native modules and TLS trust
-RUN apk add --no-cache \
-    python3 make g++ wget curl ca-certificates \
-    && update-ca-certificates
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install
 
-# Copy app files
-COPY ./ ./   
+# Copy the entire Strapi project
+COPY . .
 
-# Install plugins
-RUN npm install mysql2 \
-    && npm install @strapi/plugin-graphql \
-    && npm install strapi-plugin-ckeditor5 \
-    && npm install
+# Build Strapi admin panel
+RUN npm run build
 
-# Build Strapi (optional, for plugins/ts, not needed for dev mode)
-# RUN npm run build
-
-# ============================
-# 🐳 Runtime Stage
-# ============================
+# ---------- STAGE 2: Run ----------
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Trust internal CA certificates
+# Trust internal certs (optional)
 # RUN apk add --no-cache ca-certificates && \
 #   wget -O /usr/local/share/ca-certificates/intermediate.crt https://certs.ptp.local/intermediate.txt --no-check-certificate && \
 #   wget -O /usr/local/share/ca-certificates/root.crt https://certs.ptp.local/root.txt --no-check-certificate && \
 #   update-ca-certificates
 
-# Copy node modules and app from builder
+# Copy only built app from builder
 COPY --from=builder /app /app
-COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 
-# Expose Strapi port
+# Install only runtime deps
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# Use a non-root user (optional best practice)
+# RUN addgroup -g 1001 strapi && adduser -u 1001 -G strapi -s /bin/sh -D strapi
+# USER strapi
+
 EXPOSE 1337
 
-# Run Strapi
 CMD ["npm", "start"]
