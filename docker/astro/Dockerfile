@@ -23,10 +23,10 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 # Trust internal HTTPS CA certs
-RUN apk add --no-cache ca-certificates && \
-  wget -O /usr/local/share/ca-certificates/intermediate.crt https://certs.ptp.local/intermediate.txt --no-check-certificate && \
-  wget -O /usr/local/share/ca-certificates/root.crt https://certs.ptp.local/root.txt --no-check-certificate && \
-  update-ca-certificates
+# RUN apk add --no-cache ca-certificates && \
+#   wget -O /usr/local/share/ca-certificates/intermediate.crt https://certs.ptp.local/intermediate.txt --no-check-certificate && \
+#   wget -O /usr/local/share/ca-certificates/root.crt https://certs.ptp.local/root.txt --no-check-certificate && \
+#   update-ca-certificates
 
 # Install only runtime dependencies
 COPY package*.json ./
