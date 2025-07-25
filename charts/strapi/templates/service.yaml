@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: strapi
 spec:
-  selector:
-    app: strapi
+  type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: 1337
-  type: {{ .Values.service.type }}
+  selector:
+    app: strapi

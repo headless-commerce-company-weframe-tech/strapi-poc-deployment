@@ -1,6 +1,6 @@
 apiVersion: v2
 name: strapi
-description: A Helm chart for deploying Strapi CMS
+description: A Helm chart for Kubernetes to deploy Strapi
 type: application
 version: 0.1.0
-appVersion: "4.x"
+appVersion: "5.19.0"

@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: strapi
+  labels:
+    app: strapi
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -16,16 +18,10 @@ spec:
         - name: strapi
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            {{- range $key, $value := .Values.env }}
-            - name: {{ $key }}
-              value: "{{ $value }}"
-            {{- end }}
           ports:
             - containerPort: 1337
-          volumeMounts:
-            - name: strapi-data
-              mountPath: /srv/app/public/uploads
-      volumes:
-        - name: strapi-data
-          emptyDir: {}
+          env:
+            '{{- range $key, $val := .Values.env }}
+            - name: {{ $key }}
+              value: "{{ $val }}"
+            {{- end }}'

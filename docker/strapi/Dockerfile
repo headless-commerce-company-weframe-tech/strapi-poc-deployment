@@ -1,13 +1,31 @@
-# Stage 1
-FROM node:18-alpine as builder
+# --- STAGE 1: Build ---
+FROM node:18-alpine AS builder
+
 WORKDIR /app
-COPY . .
+
+# Install dependencies
+COPY ./package*.json ./
 RUN npm install
+
+# Copy the full project and build
+COPY . .
 RUN npm run build
 
-# Stage 2
+
+# --- STAGE 2: Runtime ---
 FROM node:18-alpine
+
 WORKDIR /app
-COPY --from=builder /app . 
+
+# Install runtime dependencies
+COPY ./package*.json ./
 RUN npm install --omit=dev
+
+# Copy build from builder stage
+COPY --from=builder /app ./
+
+# Expose default Strapi port
+EXPOSE 1337
+
+# Start Strapi
 CMD ["npm", "start"]
