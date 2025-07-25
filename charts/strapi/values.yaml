@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: your-registry/strapi
+  repository: strapi-local
   tag: latest
   pullPolicy: IfNotPresent
 

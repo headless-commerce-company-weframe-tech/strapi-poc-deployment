@@ -11,7 +11,7 @@ RUN apk add --no-cache \
     && update-ca-certificates
 
 # Copy app files
-COPY ./ ./   # Adjust path if outside monorepo
+COPY ./ ./   
 
 # Install plugins
 RUN npm install mysql2 \
@@ -30,10 +30,10 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Trust internal CA certificates
-RUN apk add --no-cache ca-certificates && \
-  wget -O /usr/local/share/ca-certificates/intermediate.crt https://certs.ptp.local/intermediate.txt --no-check-certificate && \
-  wget -O /usr/local/share/ca-certificates/root.crt https://certs.ptp.local/root.txt --no-check-certificate && \
-  update-ca-certificates
+# RUN apk add --no-cache ca-certificates && \
+#   wget -O /usr/local/share/ca-certificates/intermediate.crt https://certs.ptp.local/intermediate.txt --no-check-certificate && \
+#   wget -O /usr/local/share/ca-certificates/root.crt https://certs.ptp.local/root.txt --no-check-certificate && \
+#   update-ca-certificates
 
 # Copy node modules and app from builder
 COPY --from=builder /app /app
