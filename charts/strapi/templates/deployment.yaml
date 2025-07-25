@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: strapi
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: strapi
+  template:
+    metadata:
+      labels:
+        app: strapi
+    spec:
+      containers:
+        - name: strapi
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+          ports:
+            - containerPort: 1337
+          volumeMounts:
+            - name: strapi-data
+              mountPath: /srv/app/public/uploads
+      volumes:
+        - name: strapi-data
+          emptyDir: {}

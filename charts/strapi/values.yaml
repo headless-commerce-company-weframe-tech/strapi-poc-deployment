@@ -1,0 +1,41 @@
+replicaCount: 1
+
+image:
+  repository: your-registry/strapi
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 1337
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  hosts:
+    - host: strapi.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: local-tls
+      hosts:
+        - strapi.local
+
+env:
+  DATABASE_CLIENT: mysql
+  DATABASE_NAME: strapi
+  DATABASE_HOST: mariadb.ed-data.svc.cluster.local
+  DATABASE_PORT: 3306
+  DATABASE_USERNAME: strapi_user
+  DATABASE_PASSWORD: strapi_pass
+  NODE_ENV: production
+
+resources: {}
+
+persistence:
+  enabled: true
+  size: 1Gi

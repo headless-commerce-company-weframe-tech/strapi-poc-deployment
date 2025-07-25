@@ -1,0 +1,35 @@
+replicaCount: 1
+
+image:
+  repository: mautic/mautic
+  tag: v4.4.10
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  hosts:
+    - host: mautic.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: local-tls
+      hosts:
+        - mautic.local
+
+env:
+  MAUTIC_DB_HOST: mariadb.ed-data.svc.cluster.local
+  MAUTIC_DB_NAME: mautic
+  MAUTIC_DB_USER: mautic_user
+  MAUTIC_DB_PASSWORD: mautic_pass
+  MAUTIC_RUN_CRON_JOBS: "true"
+
+resources: {}

@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: your-registry/astro
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  hosts:
+    - host: site.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: local-tls
+      hosts:
+        - site.local
+
+env:
+  PUBLIC_SITE_NAME: "Default Astro Site"
+  PUBLIC_BASE_PATH: "/"
+  PUBLIC_API_URL: "https://api.local"
+
+resources: {}

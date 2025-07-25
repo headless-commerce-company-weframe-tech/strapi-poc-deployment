@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: strapi
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/headless-commerce-company-weframe-tech/strapi-poc-deployment.git
+    targetRevision: HEAD
+    path: charts/strapi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ed-backend
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

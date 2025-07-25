@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  repository: mariadb
+  tag: "10.11"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3306
+
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+env:
+  MARIADB_ROOT_PASSWORD: rootpass
+  MARIADB_DATABASE: shared
+  MARIADB_USER: appuser
+  MARIADB_PASSWORD: apppass
+
+resources: {}
